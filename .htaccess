@@ -1,0 +1,19 @@
+# -------------------------------------
+# API EcoPoints - Reescritura y CORS
+# -------------------------------------
+
+RewriteEngine On
+RewriteBase /
+
+# Redirige todo a index.php si no es archivo o carpeta
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^ index.php [QSA,L]
+
+# CORS (para permitir acceso desde frontends o Postman)
+Header set Access-Control-Allow-Origin "*"
+Header set Access-Control-Allow-Methods "GET, POST, OPTIONS"
+Header set Access-Control-Allow-Headers "Content-Type, Authorization"
+
+# Desactiva el listado de directorios
+Options -Indexes
