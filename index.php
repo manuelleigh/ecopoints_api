@@ -25,7 +25,8 @@ $routes = [
     ],
     "GET" => [
         "obtenerPuntos"    => "endpoints/obtenerPuntos.php",
-        "listarConvenios"  => "endpoints/listarConvenios.php"
+        "listarConvenios"  => "endpoints/listarConvenios.php",
+        "obtenerHistorial"   => "endpoints/obtenerHistorial.php"
     ]
 ];
 

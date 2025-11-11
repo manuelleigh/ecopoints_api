@@ -24,6 +24,8 @@ if (!$usuario || !password_verify($data['password'], $usuario['password_hash']))
 // Si todo está correcto
 respuestaJSON([
     "id" => $usuario['id'],
+    "nombre" => $usuario['nombre'],
+    "correo" => $usuario['email'],
     "mensaje" => "Inicio de sesión exitoso"
 ]);
 ?>
