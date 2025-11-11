@@ -5,15 +5,27 @@
 RewriteEngine On
 RewriteBase /
 
-# Redirige todo a index.php si no es archivo o carpeta
+# Permitir acceso directo a imágenes y otros archivos estáticos en 
+RewriteCond %{REQUEST_URI} ^/data/img/ [NC]
+RewriteCond %{REQUEST_FILENAME} -f
+RewriteRule ^ - [L]
+
+# Permitir acceso directo a imágenes y otros archivos estáticos en 
+RewriteCond %{REQUEST_URI} ^/data/logos/ [NC]
+RewriteCond %{REQUEST_FILENAME} -f
+RewriteRule ^ - [L]
+
+# Redirige todo lo demás a index.php (ruteador principal)
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^ index.php [QSA,L]
 
-# CORS (para permitir acceso desde frontends o Postman)
-Header set Access-Control-Allow-Origin "*"
-Header set Access-Control-Allow-Methods "GET, POST, OPTIONS"
-Header set Access-Control-Allow-Headers "Content-Type, Authorization"
+# CORS global (para permitir acceso desde frontends o Postman)
+<IfModule mod_headers.c>
+    Header set Access-Control-Allow-Origin "*"
+    Header set Access-Control-Allow-Methods "GET, POST, OPTIONS"
+    Header set Access-Control-Allow-Headers "Content-Type, Authorization"
+</IfModule>
 
-# Desactiva el listado de directorios
+# Seguridad y limpieza
 Options -Indexes

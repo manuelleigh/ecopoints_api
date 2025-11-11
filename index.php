@@ -21,13 +21,19 @@ $routes = [
         "generarQR"        => "endpoints/generarQR.php",
         "validarQR"        => "endpoints/validarQR.php",
         "canjearPuntos"    => "endpoints/canjearPuntos.php",
-        "logeoUsuario"     => "endpoints/logeoUsuario.php"
+        "logeoUsuario"     => "endpoints/logeoUsuario.php",
+        "registrarConvenio" => "endpoints/registrarConvenio.php",
+        "registrarEmpresa" => "endpoints/registrarEmpresa.php",
     ],
     "GET" => [
         "obtenerPuntos"    => "endpoints/obtenerPuntos.php",
         "listarConvenios"  => "endpoints/listarConvenios.php",
-        "obtenerHistorial"   => "endpoints/obtenerHistorial.php"
-    ]
+        "obtenerHistorial"   => "endpoints/obtenerHistorial.php",
+    ],
+    "PUT" => [
+        "actualizarUsuario" => "endpoints/actualizarUsuario.php",
+        "actualizarConvenio" => "endpoints/actualizarConvenio.php",
+    ],
 ];
 
 // ============================
