@@ -17,22 +17,26 @@ if ($_SERVER["REQUEST_METHOD"] === "OPTIONS") {
 // ============================
 $routes = [
     "POST" => [
-        "registrarUsuario" => "endpoints/registrarUsuario.php",
-        "generarQR"        => "endpoints/generarQR.php",
-        "validarQR"        => "endpoints/validarQR.php",
-        "canjearPuntos"    => "endpoints/canjearPuntos.php",
-        "logeoUsuario"     => "endpoints/logeoUsuario.php",
-        "registrarConvenio" => "endpoints/registrarConvenio.php",
-        "registrarEmpresa" => "endpoints/registrarEmpresa.php",
+        "registrarUsuario"          =>  "endpoints/registrarUsuario.php",
+        "generarQR"                 =>  "endpoints/generarQR.php",
+        "validarQR"                 =>  "endpoints/validarQR.php",
+        "canjearPuntos"             =>  "endpoints/canjearPuntos.php",
+        "logeoUsuario"              =>  "endpoints/logeoUsuario.php",
+        "registrarConvenio"         =>  "endpoints/registrarConvenio.php",
+        "registrarEmpresa"          =>  "endpoints/registrarEmpresa.php",
+        "solicitarReset"            =>  "endpoints/solicitarReset.php",
+        "verificarCodigo"           =>  "endpoints/verificarCodigo.php",
+        "actualizarContrasena"      =>  "endpoints/actualizarContrasena.php",
     ],
     "GET" => [
-        "obtenerPuntos"    => "endpoints/obtenerPuntos.php",
-        "listarConvenios"  => "endpoints/listarConvenios.php",
-        "obtenerHistorial"   => "endpoints/obtenerHistorial.php",
+        "obtenerPuntos"             =>  "endpoints/obtenerPuntos.php",
+        "listarConvenios"           =>  "endpoints/listarConvenios.php",
+        "obtenerHistorial"          =>  "endpoints/obtenerHistorial.php",
+        "obtenerHistorialCanjes"    =>  "endpoints/obtenerHistorialCanjes.php",
     ],
     "PUT" => [
-        "actualizarUsuario" => "endpoints/actualizarUsuario.php",
-        "actualizarConvenio" => "endpoints/actualizarConvenio.php",
+        "actualizarUsuario"         =>  "endpoints/actualizarUsuario.php",
+        "actualizarConvenio"        =>  "endpoints/actualizarConvenio.php",
     ],
 ];
 

@@ -1,11 +1,94 @@
 <?php
+/**
+ * @OA\Post(
+ *     path="/api/registrarConvenio",
+ *     summary="Registrar nuevo convenio",
+ *     description="Crea un nuevo convenio con imagen en base64, códigos de canje y toda la información necesaria. Endpoint para administradores.",
+ *     tags={"Convenios - Admin"},
+ *     @OA\RequestBody(
+ *         required=true,
+ *         description="Datos del convenio a registrar",
+ *         @OA\JsonContent(
+ *             required={"empresa_id", "titulo", "descripcion", "puntos_requeridos", "tipo_entrega", "imagen"},
+ *             @OA\Property(property="empresa_id", type="integer", description="ID de la empresa", example=1),
+ *             @OA\Property(property="titulo", type="string", description="Título del convenio", example="20% de descuento en productos ecológicos"),
+ *             @OA\Property(property="descripcion", type="string", description="Descripción detallada del convenio", example="Descuento especial en toda la tienda online por tiempo limitado"),
+ *             @OA\Property(property="puntos_requeridos", type="integer", description="Puntos necesarios para canjear", example=500, minimum=1),
+ *             @OA\Property(property="tipo_entrega", type="string", enum={"CODIGO", "URL"}, description="Tipo de entrega del beneficio", example="CODIGO"),
+ *             @OA\Property(property="base_url", type="string", nullable=true, description="URL base para tipo URL (requerido si tipo_entrega es URL)", example="https://tienda.com/cupones/"),
+ *             @OA\Property(property="stock", type="integer", description="Stock disponible (opcional)", example=100, minimum=0),
+ *             @OA\Property(property="imagen", type="string", format="base64", description="Imagen del convenio en base64 (PNG, JPG, JPEG, WEBP)", example="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg=="),
+ *             @OA\Property(property="codigos", type="array", description="Lista de códigos para el convenio (opcional)", 
+ *                 @OA\Items(type="string", example="DESC2024ABC123")
+ *             )
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=200,
+ *         description="Convenio registrado exitosamente",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="mensaje", type="string", example="Convenio registrado con éxito"),
+ *             @OA\Property(property="convenio_id", type="integer", example=15),
+ *             @OA\Property(property="imagen_guardada", type="string", example="convenio_6789abc12345.png"),
+ *             @OA\Property(property="codigos_registrados", type="integer", example=5)
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=400,
+ *         description="Solicitud incorrecta",
+ *         @OA\JsonContent(
+ *             oneOf={
+ *                 @OA\Schema(
+ *                     @OA\Property(property="error", type="string", example="Campo requerido faltante: titulo")
+ *                 ),
+ *                 @OA\Schema(
+ *                     @OA\Property(property="error", type="string", example="El campo tipo_entrega debe ser 'CODIGO' o 'URL'")
+ *                 ),
+ *                 @OA\Schema(
+ *                     @OA\Property(property="error", type="string", example="El campo puntos_requeridos debe ser un número positivo")
+ *                 ),
+ *                 @OA\Schema(
+ *                     @OA\Property(property="error", type="string", example="Debe proporcionar una imagen válida en formato Base64")
+ *                 ),
+ *                 @OA\Schema(
+ *                     @OA\Property(property="error", type="string", example="Formato de imagen no permitido. Usa PNG, JPG o WEBP.")
+ *                 ),
+ *                 @OA\Schema(
+ *                     @OA\Property(property="error", type="string", example="Debe proporcionar una base_url válida para tipo_entrega 'URL'")
+ *                 )
+ *             }
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=404,
+ *         description="Empresa no encontrada",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="error", type="string", example="La empresa especificada no existe o está inactiva")
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=500,
+ *         description="Error interno del servidor",
+ *         @OA\JsonContent(
+ *             oneOf={
+ *                 @OA\Schema(
+ *                     @OA\Property(property="error", type="string", example="No se pudo guardar la imagen del logo")
+ *                 ),
+ *                 @OA\Schema(
+ *                     @OA\Property(property="error", type="string", example="Error en la base de datos: Mensaje de error específico")
+ *                 )
+ *             }
+ *         )
+ *     )
+ * )
+ */
 require_once(__DIR__ . '/../config/db.php');
 require_once(__DIR__ . '/../core/funciones.php');
 
 $data = json_decode(file_get_contents("php://input"), true);
 
 // =========================
-// 🔹 VALIDACIONES INICIALES
+// VALIDACIONES INICIALES
 // =========================
 $camposRequeridos = ['empresa_id', 'titulo', 'descripcion', 'puntos_requeridos', 'tipo_entrega'];
 foreach ($camposRequeridos as $campo) {
@@ -28,7 +111,7 @@ if (empty($data['imagen']) || !preg_match('/^data:image\/(\w+);base64,/', $data[
 }
 
 // ======================
-// 🔹 PROCESAR LA IMAGEN
+// PROCESAR LA IMAGEN
 // ======================
 $extension = strtolower($tipo[1]);
 if (!in_array($extension, ['png', 'jpg', 'jpeg', 'webp'])) {
@@ -55,7 +138,7 @@ if (file_put_contents($rutaImagen, $imagenDecodificada) === false) {
 }
 
 // ===========================
-// 🔹 GUARDAR DATOS EN LA BD
+// GUARDAR DATOS EN LA BD
 // ===========================
 try {
     $conn->beginTransaction();

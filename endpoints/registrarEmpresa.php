@@ -1,4 +1,76 @@
 <?php
+/**
+ * @OA\Post(
+ *     path="/api/registrarEmpresa",
+ *     summary="Registrar nueva empresa",
+ *     description="Crea una nueva empresa en el sistema con información básica y logo opcional en base64. Endpoint para administradores.",
+ *     tags={"Empresas - Admin"},
+ *     @OA\RequestBody(
+ *         required=true,
+ *         description="Datos de la empresa a registrar",
+ *         @OA\JsonContent(
+ *             required={"nombre"},
+ *             @OA\Property(property="nombre", type="string", description="Nombre de la empresa", example="EcoStore"),
+ *             @OA\Property(property="descripcion", type="string", nullable=true, description="Descripción de la empresa", example="Tienda líder en productos ecológicos y sostenibles"),
+ *             @OA\Property(property="web_url", type="string", nullable=true, description="Sitio web de la empresa", example="https://ecostore.com"),
+ *             @OA\Property(property="logo", type="string", format="base64", nullable=true, description="Logo de la empresa en base64 (PNG, JPG, JPEG, WEBP)", example="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==")
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=200,
+ *         description="Empresa registrada exitosamente",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="mensaje", type="string", example="Empresa registrada con éxito"),
+ *             @OA\Property(property="empresa_id", type="integer", example=5),
+ *             @OA\Property(property="logo_guardado", type="string", nullable=true, example="logo_6789abc12345.png")
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=400,
+ *         description="Solicitud incorrecta",
+ *         @OA\JsonContent(
+ *             oneOf={
+ *                 @OA\Schema(
+ *                     @OA\Property(property="error", type="string", example="Campo requerido faltante: nombre")
+ *                 ),
+ *                 @OA\Schema(
+ *                     @OA\Property(property="error", type="string", example="Formato de imagen no válido para el logo")
+ *                 ),
+ *                 @OA\Schema(
+ *                     @OA\Property(property="error", type="string", example="Formato de logo no permitido. Usa PNG, JPG o WEBP.")
+ *                 ),
+ *                 @OA\Schema(
+ *                     @OA\Property(property="error", type="string", example="Error al decodificar la imagen del logo")
+ *                 )
+ *             }
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=409,
+ *         description="Conflicto - Empresa ya existe",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="error", type="string", example="Ya existe una empresa registrada con ese nombre")
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=500,
+ *         description="Error interno del servidor",
+ *         @OA\JsonContent(
+ *             oneOf={
+ *                 @OA\Schema(
+ *                     @OA\Property(property="error", type="string", example="No se pudo guardar la imagen del logo")
+ *                 ),
+ *                 @OA\Schema(
+ *                     @OA\Property(property="error", type="string", example="Error al verificar duplicados: Mensaje de error específico")
+ *                 ),
+ *                 @OA\Schema(
+ *                     @OA\Property(property="error", type="string", example="Error al registrar la empresa: Mensaje de error específico")
+ *                 )
+ *             }
+ *         )
+ *     )
+ * )
+ */
 require_once(__DIR__ . '/../config/db.php');
 require_once(__DIR__ . '/../core/funciones.php');
 
